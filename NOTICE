@@ -1,0 +1,30 @@
+Copyright 2023 LinkedIn Corporation
+All Rights Reserved.
+
+Licensed under the BSD 2-Clause License (the "License").  See License in the project root for license information.
+
+This project uses the following third-party libraries:
+
+# Apache Airflow
+License: Apache 2.0 (https://github.com/apache/airflow/blob/main/LICENSE)
+
+# Flask
+License: BSD 3-Clause (https://github.com/pallets/flask/blob/main/LICENSE.rst)
+
+# markupsafe
+License: BSD 3-Clause (https://github.com/pallets/markupsafe/blob/main/LICENSE.rst)
+
+# pendulum
+License: MIT License (https://github.com/sdispater/pendulum/blob/master/LICENSE)
+
+# pygments
+License: BSD 2-Clause (https://github.com/pygments/pygments/blob/master/LICENSE)
+
+# pytest
+License:  MIT License(https://docs.pytest.org/en/7.1.x/license.html)
+
+# sqlalchemy
+License: MIT License (https://github.com/sqlalchemy/sqlalchemy/blob/main/LICENSE)
+
+# wtforms
+License: BSD 3-Clause (https://github.com/wtforms/wtforms/blob/master/LICENSE.rst)

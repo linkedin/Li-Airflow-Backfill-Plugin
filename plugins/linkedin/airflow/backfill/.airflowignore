@@ -1,0 +1,4 @@
+# ignore folders with no plugin object
+apis
+dag_operations
+www/templates

@@ -1,0 +1,30 @@
+{% extends "airflow/main.html" %}
+
+{% block page_title %}{{ backfill_dag_id }} - Origin Code Snapshot - {{ appbuilder.app_name }}{% endblock %}
+
+{% block head_css %}
+    {{ super() }}
+{% endblock %}
+
+{% block head_meta %}
+  {{ super() }}
+  <meta name="wrapped" content="{{ wrapped }}">
+{% endblock %}
+
+{% block content %}
+  {{ super() }}
+  <h2>{{ title }}</h2>
+  <div class="code-wrap">
+    <a onclick="toggleWrap()" class="btn btn-default code-wrap-toggle">Toggle Wrap</a>
+    {{ html_code }}
+  </div>
+{% endblock %}
+
+{% block tail_js %}
+  {{ super() }}
+  <script src="{{ url_for_asset('dagCode.js') }}"></script>
+{% endblock %}
+
+{% block tail %}
+{{ super() }}
+{% endblock %}
