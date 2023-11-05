@@ -5,14 +5,13 @@ from linkedin.airflow.backfill.models.backfill import BackfillModel
 from linkedin.airflow.backfill.utils.backfill_state import BackfillState
 from linkedin.airflow.backfill.utils.operations import pause_dag
 from linkedin.airflow.backfill.utils.operations import delete_dag
-from linkedin.airflow.backfill.constants import BACKFILL_USER_DAG_FOLDER
 
 import logging
 import os
 import time
 
 
-def _delete_backfill_dag(backfill_dag_folder, backfill):
+def _delete_backfill_dag(backfill, store):
     """
     delete backfill dag file and dag metadata
     """
@@ -26,9 +25,7 @@ def _delete_backfill_dag(backfill_dag_folder, backfill):
     pause_dag(backfill.backfill_dag_id)
 
     # delete dag file
-    file_path = os.path.join(backfill_dag_folder, f"{backfill.backfill_dag_id}.py")
-    if os.path.exists(file_path):
-        os.remove(file_path)
+    store.delete_dag_file(backfill)
 
     delete_dag(dag_id=backfill.backfill_dag_id)
 
@@ -45,16 +42,16 @@ def delete_backfill_dags():
         set deleted flag
     """
     try:
+        from linkedin.airflow.backfill.utils.backfill_store import backfill_store
         logging.info('start delete mark-deleted backfills')
 
-        backfill_dag_folder = BACKFILL_USER_DAG_FOLDER
         backfills = BackfillModel.get_deletable_backfills()
         processed = 0
         for backfill in backfills:
             try:
                 logging.info(f"backfill: {backfill.backfill_dag_id}, state: {backfill.state}")
 
-                _delete_backfill_dag(backfill_dag_folder, backfill)
+                _delete_backfill_dag(backfill, backfill_store)
                 processed += 1
 
                 # pause a little bit

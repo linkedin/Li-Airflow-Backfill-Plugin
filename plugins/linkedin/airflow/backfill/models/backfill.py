@@ -14,7 +14,6 @@ if __name__ == 'linkedin.airflow.backfill.models.backfill':
     from airflow.utils.log.logging_mixin import LoggingMixin
     from airflow.utils.session import provide_session, NEW_SESSION
 
-    from linkedin.airflow.backfill.constants import BACKFILL_USER_DAG_FOLDER
     from linkedin.airflow.backfill.utils.backfill_state import BackfillState
 
     import logging
@@ -22,9 +21,6 @@ if __name__ == 'linkedin.airflow.backfill.models.backfill':
 
     def init_models():
         logging.info("init backfill models")
-
-        # create folders
-        os.makedirs(BACKFILL_USER_DAG_FOLDER, exist_ok=True)
 
         # create table if not exist
         BackfillModel.__table__.create(settings.engine, checkfirst=True)
