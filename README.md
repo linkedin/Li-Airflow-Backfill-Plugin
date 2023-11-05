@@ -49,13 +49,21 @@ volumes:
 
 ## Deploy Backfill Plugin to an Existing Airflow Instance
 
-**Deploy Plugin**
+### Deploy Plugin
+**Option 1: Drop files to Airflow plugins folder**
 
 As [Apache Airflow doc says](https://airflow.apache.org/docs/apache-airflow/2.5.3/authoring-and-scheduling/plugins.html#plugins), simply drop all the content in the [plugins folder in the project root](/plugins) to the $AIRFLOW_HOME/plugins folder of the Airflow instance. 
 
 Restart of the Airflow [may be needed according the Airflow config](https://airflow.apache.org/docs/apache-airflow/2.5.3/authoring-and-scheduling/plugins.html#when-are-plugins-re-loaded) to enable the backfill plugin.
 
-**Deploy System Dags**
+**Option 2: Install from PyPi**
+
+Starting from 1.0.2, Backfill plugin is available in PyPi. After installation, backfill lib will be installed and registered through entry_points in [setup.py](/setup.py).
+```shell
+pip install li-airflow-backfill-plugin==1.0.2
+```
+
+### Deploy System Dags
 
 Some Dags are needed to make backfill work. After enabling backfill plugin, drop all the content in the [dags/backfill_dags folder](/dags/backfill_dags/) to the configured Airflow Dags folder (default is $AIRFLOW_HOME/dags) of the Airflow instance. 
 
