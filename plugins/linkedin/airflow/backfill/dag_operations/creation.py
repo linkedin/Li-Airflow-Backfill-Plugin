@@ -3,15 +3,16 @@
 
 from linkedin.airflow.backfill.models.backfill import BackfillModel
 from linkedin.airflow.backfill.utils.backfill_state import BackfillState
-from linkedin.airflow.backfill.constants import BACKFILL_USER_DAG_FOLDER, BACKFILL_GET_SUBMITTED_DAGS_LIMIT
+from linkedin.airflow.backfill.constants import BACKFILL_GET_SUBMITTED_DAGS_LIMIT
 
 import logging
 import time
-import os
 import base64
 
 
 BACKFILL_CODE_TEMPLATE = """
+
+
 
 # apply backfill
 from linkedin.airflow.backfill.dag_operations.creation_util import apply_backfill
@@ -27,7 +28,7 @@ apply_backfill(
 """
 
 
-def _create_backfill_dag_file(backfill, file_path):
+def _create_backfill_dag_file(backfill, store):
     """
     generate backfill dag code file
     """
@@ -41,18 +42,16 @@ def _create_backfill_dag_file(backfill, file_path):
         base64.b64encode(backfill.dag_params.encode('utf-8')) if backfill.dag_params else "",
     )
 
-    with open(file_path, 'w') as f:
-        f.write(backfill.origin_code)
-        f.write(backfill_code)
+    backfill_dag_code = backfill.origin_code + backfill_code
+    store.persist_dag_file(backfill, backfill_dag_code)
 
 
-def _process_submitted_backfill(backfill, backfill_user_dag_folder):
+def _process_submitted_backfill(backfill, store):
     """
     create a backfill dag file
     """
     # create dag file
-    backfill_dag_file_path = os.path.join(backfill_user_dag_folder, f"{backfill.backfill_dag_id}.py")
-    _create_backfill_dag_file(backfill, backfill_dag_file_path)
+    _create_backfill_dag_file(backfill, store)
 
     # update info
     BackfillModel.queue(backfill.backfill_dag_id)
@@ -79,7 +78,8 @@ def process_submitted_backfills():
             logging.info(f"backfill: {backfill.backfill_dag_id}")
 
             try:
-                _process_submitted_backfill(backfill, BACKFILL_USER_DAG_FOLDER)
+                from linkedin.airflow.backfill.utils.backfill_store import backfill_store
+                _process_submitted_backfill(backfill, backfill_store)
                 processed += 1
 
                 # pause a little bit for db

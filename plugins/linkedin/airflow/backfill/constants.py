@@ -6,9 +6,6 @@ import os
 
 AIRFLOW_FOLDER = os.getenv("AIRFLOW_HOME") or "/opt/airflow"
 
-# folder to store user backfill dags in Airflow dags folder
-BACKFILL_USER_DAG_FOLDER = os.path.join(AIRFLOW_FOLDER, "dags/backfill_user_dags")
-
 # backfill origin code snapshot date format
 BACKFILL_ORIGIN_CODE_SNAPSHOT_DATE_FORMAT = "%Y-%m-%d"
 

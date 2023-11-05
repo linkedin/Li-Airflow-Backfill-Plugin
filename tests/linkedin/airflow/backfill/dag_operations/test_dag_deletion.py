@@ -1,19 +1,21 @@
 from linkedin.airflow.backfill.models.backfill import BackfillModel
 from linkedin.airflow.backfill.utils.backfill_state import BackfillState
-
+from linkedin.airflow.backfill.utils.backfill_store import BackfillStoreBase
 import linkedin.airflow.backfill.dag_operations.dag_deletion as de
 
 import os
+from unittest.mock import Mock
 
 
 def test_delete_backfill_dag(mocker):
-
-    backfill_dag_folder = '/tmp'
     backfill_dag_id = 'test_dag_backfill_000'
     file_path = '/tmp/test_dag_backfill_000.py'
     # create a file for tests
     with open(file_path, 'w') as _:
         pass
+
+    store = BackfillStoreBase()
+    store._get_backfill_dag_path = Mock(return_value=file_path)
 
     # case: state not deletable
     m_pause_dag = mocker.patch('linkedin.airflow.backfill.dag_operations.dag_deletion.pause_dag')
@@ -22,7 +24,7 @@ def test_delete_backfill_dag(mocker):
     backfill = BackfillModel(
         state=BackfillState.QUEUED,
     )
-    de._delete_backfill_dag(backfill_dag_folder, backfill)
+    de._delete_backfill_dag(backfill, store)
     m_pause_dag.assert_not_called()
     m_delete_dag.assert_not_called()
     m_model_delete_dag.assert_not_called()
@@ -36,7 +38,7 @@ def test_delete_backfill_dag(mocker):
         backfill_dag_id=backfill_dag_id,
     )
     assert os.path.exists(file_path)
-    de._delete_backfill_dag(backfill_dag_folder, backfill)
+    de._delete_backfill_dag(backfill, store)
     m_pause_dag.assert_called_once_with(backfill_dag_id)
     m_delete_dag.assert_called_once_with(dag_id=backfill_dag_id)
     m_model_delete_dag.assert_called_once_with(backfill_dag_id)
@@ -51,7 +53,7 @@ def test_delete_backfill_dag(mocker):
         backfill_dag_id=backfill_dag_id,
     )
     assert not os.path.exists(file_path)
-    de._delete_backfill_dag(backfill_dag_folder, backfill)
+    de._delete_backfill_dag(backfill, store)
     m_pause_dag.assert_called_once_with(backfill_dag_id)
     m_delete_dag.assert_called_once_with(dag_id=backfill_dag_id)
     m_model_delete_dag.assert_called_once_with(backfill_dag_id)
