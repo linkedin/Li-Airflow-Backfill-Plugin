@@ -7,7 +7,6 @@ from linkedin.airflow.backfill.utils.operations import pause_dag
 from linkedin.airflow.backfill.utils.operations import delete_dag
 
 import logging
-import os
 import time
 
 

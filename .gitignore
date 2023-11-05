@@ -2,5 +2,6 @@ __pycache__/
 
 /logs
 /dags/backfill_user_dags
-plugins/oklahoma_backfill.egg-info
+*.egg-info/
+/dist
 

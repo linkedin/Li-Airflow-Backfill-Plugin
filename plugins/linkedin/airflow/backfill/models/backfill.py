@@ -17,7 +17,6 @@ if __name__ == 'linkedin.airflow.backfill.models.backfill':
     from linkedin.airflow.backfill.utils.backfill_state import BackfillState
 
     import logging
-    import os
 
     def init_models():
         logging.info("init backfill models")
