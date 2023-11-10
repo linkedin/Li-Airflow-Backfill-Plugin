@@ -1,6 +1,6 @@
 import setuptools
 
-version = "1.0.2"
+version = "1.0.3"
 
 with open('README.md', 'r') as fd:
     long_description = fd.read()
@@ -8,7 +8,7 @@ with open('README.md', 'r') as fd:
 setuptools.setup(
     name='li-airflow-backfill-plugin',
     version=version,
-    description='Backfill features plugin for Airflow',
+    description='From Airflow deployed in LinkedIn Infra production, full-fledged backfill feature with manageability and scalability, including UI and APIs.',
     long_description=long_description,
     long_description_content_type="text/markdown",
     url='https://github.com/linkedin/Li-Airflow-Backfill-Plugin',
